@@ -1,1 +1,334 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[a4paper]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[dvipsnames]{xcolor}
+
+
+\newcommand{\E}{\mbox{I\negthinspace E}}
+
+
+\title{Abgabe 1 für Computergestützte Methoden}
+\author{Gruppe 1 von\\ Philipp Jackl (4335397)\\ Florian Görz (4340446)\\ Colin Nedderhoff (4364162) }
+\date{2.12.2024}
+
+
+
+\begin{document}
+
+
+\maketitle
+
+%Inhaltsverzeichnis
+\tableofcontents
+
+
+
+\newpage
+
+\section{Der Zentrale Grenzwertsatz}
+
+Der zentrale Grenzwertsatz (ZGS) ist ein fundamentales Resultat der Wahrscheinlichkeitstheorie, das die Verteilung von Summen unabhängiger, identisch verteilter (\textit{i.i.d.}) Zufallsvariablen (ZV) beschreibt. Er besagt, dass unter bestimmten Voraussetzungen die Summe einer großen Anzahl solcher ZV annäherend normalverteilt ist, unabhängig von der Verteilung der einzelnen ZV. Die ist besonders nützlich, da die Normalverteilung gut untersucht und mathematisch handhabbar ist.
+
+\subsection{Aussage}
+
+ Sei $X_1,X_2,\dots,X_n$ eine Folge von $i.i.d.$ ZV mit dem Erwartungswert $\mu = \E (X_i)$ und der Varianz $\sigma^2 = \mathrm{Var} (X_i)$, wobei $0 < \sigma^2 < \infty$ gelte. Dann konvergiert die standardisierte Summe $Z_n$ dieser ZV für $n \to \infty$ in Verteilung gegen eine Standardnormalverteilung:\footnote{{Der zentrale Grenzwertsatz hat verschiedene Verallgemeinerungen. Eine davon ist der \textbf{Lindeberg-Feller-Zentrale-Grenzwertsatz} \cite{Buch}, Seite 328], der schwächere Bedingungen an die Unabhängigkeit und die identische Verteilung der ZV stellt.}}
+
+
+\begin{equation}
+    \label{Normalverteilung}
+     \\Z_n = \frac{\sum_{i=1}^n X_i - n\mu} {\sigma \sqrt{n}} \overset{d}{\to} \mathcal{N}(0,1).
+\end{equation}
+
+\noindent
+Das bedeutet, dass für große $n$ die Summe der ZV näherungsweise normalverteilt ist mit dem Erwartungswert $n\mu$ und der Varianz $n\sigma^2$:
+
+
+\begin{equation}
+    \label{Mu_Sigma}
+\sum_{i = 1}^n X_i \sim \mathcal{N} (n\mu, n\sigma^2).
+\end{equation}
+
+
+\subsection{Erklärung der Standardisierung}
+
+Um die Summe der ZV in eine Standardnormalverteilung zu transformieren, subtrahiert man den Erwartungswert $n\mu$ und teilt durch die Standardabweichung $\sigma \sqrt{n}.$ Dies führt zu der obigen Formel \eqref{Normalverteilung}. Die Darstellung \eqref{Mu_Sigma} ist für $n \to \infty$ nicht wohldefiniert.
+
+
+
+\subsection{Anwendungen}
+
+Der ZGS wird in vielen Bereichen der Statistik und der Wahrscheinlichkeitstheorie angewendet. Typische Beispiele sind:
+
+\begin{itemize}
+    \item Die Durchführung von Hypothesentests
+    \item Die Approximation von Wahrscheinlichkeiten für Summen oder Mittelwerte
+\end{itemize}
+
+
+
+
+
+
+\newpage
+
+\section{Datenverarbeitung}
+
+\subsection{Analyse und Beschreibung des Datensatzes}
+
+Der uns vorliegende Datensatz enthält verschiedene Daten eines Fahrradverleihs mit verleih relevanten Angaben, wie z.B.:
+
+\begin{itemize}
+    \item Station
+    \item Datum
+    \item Tag des Jahres
+    \item Tag der Woche
+    \item Monat des Jahres
+    \item Niederschlag 
+    \item Windgeschwindigkeit
+    \item Minimale Temperatur
+    \item Mittlere Temperatur
+    \item Maximale Temperatur
+    \item Anzahl der ausgeliehenen Fahrräder
+\end{itemize}
+
+
+\noindent Der Schwerpunkt dieser Untersuchung liegt auf der detaillierten Analyse sämtlicher relevanter Daten zur Station „1 Ave \& E 18 St“, die unserer Arbeitsgruppe zugeteilt wurde.\\ Im Mittelpunkt der Betrachtung stehen die Variablen Datum, Durchschnittstemperatur, Maximaltemperatur, Minimaltemperatur sowie die Anzahl der ausgeliehenen Fahrräder.\\ Die Auswertung der Daten zeigt eine signifikante Abhängigkeit der Fahrradnutzung von den vorherrschenden Wetterbedingungen.\\
+\\
+Bei der Analyse des Datensatzes haben wir in Zeile $211$, am 29.07.2023, in der Spalte („average temperature“) einen Wert von -1°F festgestellt. Dieser Wert erscheint als unplausibel und fehlerhaft, da die durchschnittlichen Temperaturen an den benachbarten Tagen, am Vortag 83°F (am 28.07.2023) und am Folgetag 74°F (am 30.07.2023) betrugen.\\ 
+Eine derartige Temperaturschwankung innerhalb von 72 Stunden halten wir unter Berücksichtigung der meteorologischen Realitäten für äußerst unwahrscheinlich. Daher handelt es sich bei dem Wert -1°F mit hoher Wahrscheinlichkeit um einen Fehler im Datensatz.\\
+Trotz der vermuteten Fehlerhaftigkeit hat der Wert keinen Einfluss auf die Berechnung der maximalen Durchschnittstemperatur.
+
+
+\newpage
+
+\subsection{Import des Datensatzes in eine Tabellenkalkulation}
+
+Um die CSV-Datei des Datensatzes in einem Tabellenkalkulationsprogramm verwenden zu können, muss die Datei importiert werden:
+
+\begin{itemize}
+    \item Importieren Sie die Datei in ein Tabellenkalkulationsprogramm wie Excel.
+    \item Klicken Sie in der oberen Leiste auf „Dateien".
+    \item Wählen Sie die entsprechende Spalte aus, deren Inhalt Sie mit Hilfe der Trennzeichen in Spalten aufteilen möchten, in unserem Fall die Spalte „A".
+    \item Dann klicken Sie in der oberen Leiste auf „Text in Spalten" nun können Sie den Datensatz mit Hilfe der Trennzeichen (z.B. Kommas) in einzelne Spalten aufteilen
+    \item „Trennzeichen“ anklicken $\rightarrow$ „Weiter“
+    \item bei Trennzeichen „Komma“ auswählen $\rightarrow$ „Weiter"
+    \item bei Datenform „Standard“ ausgewählt lassen $\rightarrow$ „Fertigstellen“
+\end{itemize}
+
+
+\begin{figure} [!htbp]
+    \centering
+    \includegraphics[width=1\linewidth]{Tabellenkalkulation...png}
+    \caption{Tabellenkalkulation}
+    \label{Tabellenkalkulation}
+\end{figure}
+
+\newpage
+
+\subsection{Berechnung der höchsten mittleren Temperatur und Dokumentation des Vorgehens}
+
+Zur Bestimmung der höchsten mittleren Temperatur wurde die Spalte „average temperature“ unter Berücksichtigung der Station „1 Ave \& E 18 St“ untersucht. Da nur die Zeilen 2 bis 366 die relevanten Daten enthalten, wurden diese für die Analyse herangezogen. Die Berechnung erfolgt mittels der folgenden Funktion.
+
+\begin{equation}
+    \label{Berechnung average Temperature in Fahrenheit}
+    \\MAX (J2:J366) 
+\end{equation}
+
+\noindent
+Das Ergebnis dieser Operation beträgt 83 (in Fahrenheit). Da dieser Wert in der Einheit Fahrenheit angegeben ist, erfolgt die Umrechnung in Grad Celsius mit der Formel.  
+
+\begin{equation}
+    \label{Formel für Umrechnung in Grad Celsius}
+    \\ C = \frac{F-32}{1,8}
+\end{equation}\\
+
+
+\noindent
+Hierbei bezeichnet $F$ den in Fahrenheit berechneten Temperaturwert. Durch Einsetzen des Wertes $F=83$ ergibt sich:
+
+\begin{equation}
+    \label{Berechnung Grad Celsius mit Werten}
+    \\ C = \frac{83-32}{1,8} = 28,33^{\degree}
+\end{equation}
+
+\noindent
+Zusammenfassend lässt sich die gesamte Berechnung in einer konsolidierten Formel ausdrücken:
+
+\begin{equation}
+    \label{Konsolidierte Formel zur Berechnung der mittleren höchsten Temperatur}
+    \\ C = \frac{MAX (J2:J366)-32}{1,8} = 28,33{\degree}
+\end{equation}
+
+\noindent
+Dieser Wert von 28,33\degree C entspricht der höchsten mittleren Temperatur innerhalb des analysierten Datensatzes.\\
+
+
+\section{Datenhaltung}
+
+\subsection{Entwurf des Datenbankschemas}
+
+\begin{enumerate}
+    \item \textbf{Normalform}
+ 
+
+    \begin{itemize}
+        \item Der vorliegende Datensatz befindet sich bereits in der ersten Normalform (1NF), da sämtliche Attribute atomar sind und nicht weiter in sinnvollere oder kleinere Einheiten zerlegt werden können.
+    \end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\linewidth]{1. Normalform.png}
+    \caption{1. Normalform}
+    \label{Tabelle 1. Normalform}
+\end{figure}
+
+
+\newpage
+
+    \item \textbf{Normalform} 
+
+\begin{itemize}
+    \item In der zweiten Normalform (2NF) haben wir alle nicht-atomaren Attribute in mehreren Tabellen organisiert. Jede dieser Tabellen hat einen eindeutigen \textcolor{red}{Primärschlüssel}, der sich aus den entsprechenden \textcolor{ForestGreen}{Schlüsselattributen} zusammensetzt.\\ Die Tabelle „rental“ steht mit den anderen Tabellen über definierte \textcolor{orange}{Fremdschlüssel} in Beziehung, die die entsprechenden funktionalen Abhängigkeiten abbilden.\\
+    Trotz der umfassenden Informationen zum Datum, die im Datensatz enthalten sind, haben wir uns entschieden, diese beizubehalten, um zukünftige Analysen der Verleihdaten für bestimmte Zeiträume genau durchführen zu können.
+\end{itemize}
+
+\end{enumerate}
+
+
+\begin{figure} [!htbp]
+    \centering
+    \includegraphics[width=0.65\linewidth]{Tabellen 2.Normalform.png}
+    \caption{2.Normalform}
+    \label{Tabellen 2. Normalform}
+\end{figure}
+
+
+\subsection{Definition der Tabellen in SQL}
+
+\begin{figure} [!htbp]
+    \centering
+    \includegraphics[width=0.387\linewidth]{SQL-Definition der Tabellen.png}
+    \caption{Tabellen in SQL}
+    \label{Definition der Tabellen in SQl}
+\end{figure}
+
+
+
+\newpage
+
+\subsection{Beschreibung des SQL-Codes zur Definition der Tabellenstruktur}
+
+Zur Erstellung von Tabellen in SQL verwenden wir den Befehl „CREATE TABLE IF NOT EXISTS“. Diesem Befehl folgt der Name der zu erstellenden Tabelle, gefolgt von einer Klammer, die die Definition der zu erstellenden Spalten enthält. Diese enthält die Spaltennamen, die Datentypen und gegebenenfalls die für jede Spalte geltenden Einschränkungen (Constraints).\\
+\\
+Ausgehend von der ersten Normalform haben wir die Spalten der CSV-Datei analysiert. Attribute, bei denen dies sinnvoll war, wurden logisch zusammengefasst, um Redundanzen zu vermeiden und die Datenstruktur zu optimieren. Auf dieser Grundlage wurden die folgenden Tabellen definiert:
+
+\begin{itemize}
+    \item Stations
+    \item Date
+    \item Weather
+    \item Rental
+\end{itemize}
+
+\noindent
+Die Inhalte der einzelnen Tabelle haben wir so gestaltet, dass jede Tabelle über einen eindeutigen Primärschlüssel verfügt. Dieser Primärschlüssel, gekennzeichnet durch eine \#id, dient als eindeutiger Identifikator und ermöglicht den direkten Zugriff auf die jeweiligen Datensätze innerhalb der Tabelle.\\
+\\
+Die anderen Spalten der Tabellen bestehen aus den definierten Attributen. Jedes Attribut wird durch seinen Namen und den zugehörigen Datentyp spezifiziert. Die Datentypen der Spalten, welche die Art der in den Spalten gespeicherten Einträge definieren, gehören in diesem Kontext zu den folgenden Typen:
+
+\begin{itemize}
+    \item \textbf{Integer} 
+    \begin{itemize}
+        \item Speichert ganzzahlige Werte
+    \end{itemize}
+    \item \textbf{Text}
+    \begin{itemize}
+        \item Eignet sich für Zeichenketten und Textdaten
+    \end{itemize}
+    \item \textbf{Real}
+    \begin{itemize}
+        \item Ermöglicht die Speicherung von Zahlenwerten, einschließlich Dezimalzahlen
+    \end{itemize}
+    \item \textbf{Date}
+    \begin{itemize}
+        \item Dient zur Speicherung von Datumswerten und ermöglicht chronologische Berechnungen oder Abfragen basierend auf Zeitangaben.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+
+\noindent
+Die Tabelle „rental“ weist eine Besonderheit auf, da sie neben dem Primärschlüssel drei Fremdschlüssel enthält:
+
+\begin{itemize}
+    \item Stationsid
+    \item Weatherid
+    \item Dateid
+\end{itemize}
+
+\noindent
+Diese Fremdschlüssel dienen dazu, Beziehungen zwischen der Tabelle „rental“ und den jeweiligen Primärschlüsseln anderer Tabellen herzustellen. Sie ermöglichen den Zugriff auf die in diesem verknüpften Tabellen gespeicherten Informationen und erleichtern so die Nutzung und Verknüpfung der relevanten Daten.
+
+\subsection{Definition der Tabellen mit dem DDL-Befehl in SQL}
+
+Im Rahmen unseres Arbeitsprozesses war es nicht erforderlich, den DDL-Befehl (Data Definition Language) zur manuellen Erstellung der Datenbanktabellen zu verwenden. Dies ist darauf zurückzuführen, dass der verwendete Online-SQL-Editor so konfiguriert ist, dass er Tabellen automatisch generiert, wenn eine Abfrage auf eine noch nicht existierende Tabelle zugreift.\\ 
+Dieser automatische Mechanismus erleichterte den Arbeitsablauf, da wir auf die Anpassung der Tabellenstruktur verzichten und direkt mit den SQL-Abfragen arbeiten konnten.\\ 
+Dennoch können die nachfolgend aufgeführten grundlegenden Befehle im DDL-Teil genutzt werden:\\
+
+\noindent
+Zur Erstellung einer Datenbank kann der Befehl \textbf{CREATE DATABASE} verwendet werden. Für Modifikationen an der Datenbank ist der Befehl \textbf{ALTER DATABASE} erforderlich.\\ 
+Mit dem Befehl \textbf{CREATE TABLE} können Tabellen erzeugt und mit \textbf{ALTER TABLE} anschließend modifiziert werden.\\ 
+Sofern erforderlich, kann eine Tabelle auch mit dem Befehl \textbf{DROP TABLE} gelöscht werden. 
+Ein Index wird nach dem gleichen Prinzip mithilfe des Befehls \textbf{CREATE INDEX} erzeugt und mit dem Befehl \textbf{DROP INDEX} gelöscht.\\ 
+Eine Löschung erfolgt durch den Befehl \textbf{DROP}.
+
+
+\subsection{Abfrage zur Ermittlung der höchsten mittleren Temperatur}
+
+\begin{figure} [!htbp]
+    \centering
+    \includegraphics[width=1\linewidth]{SQL-Abfrage zur Ermittlung der höchsten mittleren Temperatur.png}
+    \caption{SQL-Abfrage zur Ermittlung der höchsten mittleren Temperatur}
+    \label{SQL-Abfrage zur Ermittlung der höchsten mittleren Temperatur}
+\end{figure}
+
+\newpage
+
+\noindent
+\textbf{Zeile 1:}\\
+Erstellen einer neuen Spalte in der Tabelle der CSV-Datei, die den Namen „average temperature celsius“ trägt. Alle Werte in dieser Spalte sind nun vom Datentyp „REAL“ welcher numerische Werte einschließlich Dezimalstellen zulässt.\\
+\\
+\textbf{Zeile 2:}\\
+Aktualisierung der Tabelle\\
+\\
+\textbf{Zeile 3:}\\
+Die Werte der Spalte „average temperature“ (in SQLite-Online als $c10$ bezeichnet) werden in die neu erstellte Spalte „average temperature celsius“ übertragen. Im Rahmen dieses Prozesses erfolgt eine mathematische Umrechnung der Temperaturen von Grad Fahrenheit in Grad Celsius. Die korrekte Umrechnung der Werte erfolgt mittels der Cast(...)-Funktion, welche die Werte der Spalte $c10$ in den Datentyp „Real“ konvertiert. Dadurch werden die Voraussetzungen für eine ordnungsgemäße Berechnung geschaffen.\\
+\\
+\textbf{Zeile 4:}\\
+Die vorliegende Bedingung stellt sicher, dass der Code aus $Zeile 3$ ausschließlich auf diejenigen Zeilen angewendet wird, in denen die Spalte $c10$ gültige (d.h. nicht leere) Werte aufweist. Folglich werden alle Zeilen, die keinen Wert in der betreffenden Spalte aufweisen, aus der weiteren Verarbeitung herausgefiltert.\\
+\\
+\textbf{Zeile 6-8:}\\
+Die vorliegende Aufgabenstellung fordert die Ermittlung des maximalen Wertes der mittleren Temperatur für unsere Gruppe „1“. Aufgrund der zugewiesenen Station „1 Ave \& E 18 St“ ist eine Einschränkung der Abfrage auf die Daten dieser Station erforderlich. Im Rahmen der Aufgabenstellung ist lediglich der maximale Wert der Spalte „average temperature celsius“ zu ermitteln, wobei die Bedingung zu berücksichtigen ist, dass der Stationsname mit der für unsere Gruppe relevanten Station übereinstimmt.\\
+\\
+Die formulierte Abfrage gewährleistet die präzise Extraktion der gewünschten Werte. Die SELECT-Anweisung dient der Ausgabe der Spalte $c2$ (Stationen) sowie des dazugehörigen maximalen Werts der Spalte „average temperature celsius“ als Ergebnisse. Die Daten werden aus der zugrunde liegenden Tabelle (CSV-Datei) abgerufen, wobei zwei Bedingungen für den maximalen Wert der neuen Spalte erfüllt sein müssen:\\
+\\
+Die Spalte $c10$ (ursprünglich „average temperature“) enthält gültige Werte, in diesem Punkt.
+Der Inhalt der Spalte $c2$ (Stationsname) entspricht der Station „1 Ave \& E 18 St“.\\
+Unsere Abfrage filtert somit die relevanten Daten und stellt den maximalen mittleren Temperaturwert in Grad Celsius für die zugewiesene Station dar.
+
+
+
+\newpage
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+
+\end{document}
+
 
